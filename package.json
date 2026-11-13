@@ -1,0 +1,28 @@
+{
+  "name": "devsecops-pipeline",
+  "version": "1.0.0",
+  "description": "Small Express API used to demonstrate a secure CI/CD pipeline with GitHub Actions",
+  "main": "src/server.js",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js",
+    "lint": "eslint .",
+    "build": "node scripts/build-check.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "supertest": "^7.3.2"
+  }
+}
