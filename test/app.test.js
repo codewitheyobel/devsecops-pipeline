@@ -62,3 +62,12 @@ test('GET /api/users/search sends user input as a parameter, never inside the SQ
   assert.ok(!calls[0].text.includes(evil), 'user input must not be inside the SQL text');
   assert.deepEqual(calls[0].params, [evil]);
 });
+
+test('GET /api/users/by-email sends the e-mail as a parameter, never inside the SQL', async () => {
+  const evil = "x' OR '1'='1";
+  const res = await request(createApp()).get('/api/users/by-email').query({ email: evil });
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 1);
+  assert.ok(!calls[0].text.includes(evil), 'user input must not be inside the SQL text');
+  assert.deepEqual(calls[0].params, [evil]);
+});

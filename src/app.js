@@ -84,9 +84,11 @@ function createApp() {
       return res.status(503).json({ error: 'Database not configured' });
     }
     try {
-      // INSECURE: user input is glued straight into the SQL text.
+      // FIXED: parameterized query - the e-mail is passed as $1, separately
+      // from the SQL text, so it is always treated as data, never as SQL.
       const result = await db.pool.query(
-        "SELECT id, name, email FROM users WHERE email = '" + email + "'",
+        'SELECT id, name, email FROM users WHERE email = $1',
+        [email],
       );
       return res.json(result.rows);
     } catch {
