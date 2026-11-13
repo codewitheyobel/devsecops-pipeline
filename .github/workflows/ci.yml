@@ -80,3 +80,21 @@ jobs:
           # --redact: never print the secret itself into the (public) log.
           # Exit code 1 = leak found = this step fails = the job fails.
           gitleaks git --log-opts="${range}" --redact --verbose .
+
+  dependency-scan:
+    name: Dependency scan (npm audit)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Full audit report (all deps, all severities - report only)
+        run: npm audit || true
+
+      - name: Dependency gate (production deps, fail on HIGH or CRITICAL)
+        run: npm audit --omit=dev --audit-level=high
