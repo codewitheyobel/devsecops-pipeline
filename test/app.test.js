@@ -31,7 +31,7 @@ test('GET /health returns ok', async () => {
 test('GET /api/items returns the item list', async () => {
   const res = await request(createApp()).get('/api/items');
   assert.equal(res.status, 200);
-  assert.equal(res.body.length, 2);
+  assert.equal(res.body.length, 3); // DELIBERATE FAILURE for Task 2.5 - there are only 2 items
 });
 
 test('GET /api/items/:id returns 404 for a missing item', async () => {
