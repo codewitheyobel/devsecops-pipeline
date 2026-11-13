@@ -74,6 +74,27 @@ function createApp() {
     }
   });
 
+  // Look up a user by e-mail address.
+  app.get('/api/users/by-email', async (req, res) => {
+    const email = req.query.email;
+    if (typeof email !== 'string' || email.length === 0) {
+      return res.status(400).json({ error: 'email query parameter is required' });
+    }
+    if (!db.isConfigured()) {
+      return res.status(503).json({ error: 'Database not configured' });
+    }
+    try {
+      // FIXED: parameterized query - the e-mail is passed as $1, separately
+      // from the SQL text, so it is always treated as data, never as SQL.
+      const result = await db.pool.query(
+        'SELECT id, name, email FROM users WHERE email = $1',
+        [email],
+      );
+      return res.json(result.rows);
+    } catch {
+      return res.status(500).json({ error: 'Database error' });
+    }
+  });
   return app;
 }
 
